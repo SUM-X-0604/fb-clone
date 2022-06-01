@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import HeaderIcon from './HeaderIcon';
 import {
@@ -16,10 +16,11 @@ import {
     SearchIcon,
     ShoppingCartIcon
 } from '@heroicons/react/outline';
+import { signOut, useSession } from 'next-auth/react';
 
 const Header = () => {
-
     const [search, setSearch] = useState();
+    const { data: session } = useSession();
 
     const showInput = () => {
         setSearch(!search)
@@ -63,9 +64,19 @@ const Header = () => {
             <div className='flex items-center sm:space-x-2 justify-end'>
 
                 {/* profile image */}
+                <Image
+                    onClick={signOut}
+                    className='cursor-pointer rounded-full'
+                    src={session.user.image}
+                    width="40"
+                    height="40"
+                    layout="fixed"
+                    alt='profile picture'
+                />
 
+                {/* name */}
                 <p className='font-semibold whitespace-nowrap pr-3 text-sm sm:text-lg md:text-lg'>
-                    Sumit Verma
+                    {session.user.name}
                 </p>
                 <ChatIcon className='icon' />
                 <ViewGridIcon className='icon' />
